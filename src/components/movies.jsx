@@ -4,17 +4,20 @@ import Like from "./common/like";
 import Pagination from "./common/pagination";
 
 import { getMovies } from "../services/fakeMovieService";
+import { getGenres } from "../services/fakeGenreService";
 import { paginate } from "../utils/paginate";
+import ListGroup from "./common/listGroup";
 
 class Movies extends Component {
   state = {
     movies: [],
+    genres: [],
     currentPage: 1,
     pageSize: 4
   };
 
   componentDidMount = () => {
-    this.setState({ movies: getMovies() });
+    this.setState({ movies: getMovies(), genres: getGenres() });
   };
 
   handleDelete = id => {
@@ -36,13 +39,17 @@ class Movies extends Component {
   render() {
     const { length: count } = this.state.movies;
     const { movies: allMovies, currentPage, pageSize } = this.state;
+    const { genres } = this.state;
 
     if (count === 0) return <p>There are no movies in the database.</p>;
 
     const movies = paginate(allMovies, currentPage, pageSize);
 
     return (
-      <>
+      <div className="row">
+        <div className="col-2">
+          <ListGroup items={genres} />
+        </div>
         <div className="col">
           <p>Showing {count} movies in the database.</p>
           <table className="table table-striped">
@@ -86,7 +93,7 @@ class Movies extends Component {
             onPageChange={this.handlePageChange}
           />
         </div>
-      </>
+      </div>
     );
   }
 }
