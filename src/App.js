@@ -13,8 +13,8 @@ function App() {
       <NavBar />
       <main className="container">
         <Switch>
-          <Route path="/movies" component={Movies} />
           <Route path="/movies/:id" component={MovieForm} />
+          <Route path="/movies" component={Movies} />
           <Route path="/customers" component={Customers} />
           <Route path="/rentals" component={Rentals} />
           <Route path="/not-found" component={NotFound} />
