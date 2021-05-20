@@ -1,33 +1,23 @@
 import React, { Component } from "react";
+import TableHeader from "./common/tableHeader";
 import Like from "./common/like";
 
 class MoviesTable extends Component {
-  raiseSort = path => {
-    const sortColumn = { ...this.props.sortColumn };
-    if (sortColumn.path === path) {
-      sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
-    } else {
-      sortColumn.path = path;
-      sortColumn.order = "asc";
-    }
-    this.props.onSort(sortColumn);
-  };
+  columns = [
+    { label: "Title", path: "title" },
+    { label: "Genre", path: "genre.name" },
+    { label: "Stock", path: "numberInStock" },
+    { label: "Rate", path: "dailyRentalRate" },
+    { key: "like" },
+    { key: "delete" }
+  ];
 
   render() {
-    const { movies, onLike, onDelete } = this.props;
+    const { movies, onLike, onDelete, onSort, sortColumn } = this.props;
 
     return (
       <table className="table table-striped">
-        <thead>
-          <tr>
-            <th onClick={() => this.raiseSort("title")}>Title</th>
-            <th onClick={() => this.raiseSort("genre.name")}>Genre</th>
-            <th onClick={() => this.raiseSort("numberInStock")}>Stock</th>
-            <th onClick={() => this.raiseSort("dailyRentalRate")}>Rate</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
+        <TableHeader columns={this.columns} sortColumn={sortColumn} onSort={onSort} />
         <tbody>
           {movies.map(movie => (
             <tr key={movie._id}>
@@ -42,7 +32,7 @@ class MoviesTable extends Component {
                 <button
                   type="button"
                   className="btn btn-danger btn-sm"
-                  onClick={() => onDelete(movie._id)}
+                  onClick={() => onDelete(movie)}
                 >
                   Delete
                 </button>
