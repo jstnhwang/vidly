@@ -45,27 +45,36 @@ class Movies extends Component {
     this.setState({ sortColumn });
   };
 
-  render() {
-    const { movies: allMovies, currentPage, pageSize } = this.state;
-    const { genres, selectedGenre } = this.state;
-    const { sortColumn } = this.state;
+  getPagedData = () => {
+    const { movies: allMovies, selectedGenre, sortColumn, currentPage, pageSize } = this.state;
 
     const filtered =
       selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies;
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
-
     const movies = paginate(sorted, currentPage, pageSize);
+    return { totalCount: filtered.length, data: movies };
+  };
 
-    if (filtered.length === 0) return <p>There are no movies in the database.</p>;
+  render() {
+    const { count } = this.state.movies.length;
+    const { currentPage, pageSize, sortColumn } = this.state;
+
+    const { totalCount, data: movies } = this.getPagedData();
+
+    if (count === 0) return <p>There are no movies in the database.</p>;
 
     return (
       <div className="row">
         <div className="col-2">
-          <ListGroup items={genres} selectedItem={selectedGenre} onItemSelect={this.handleGenreSelect} />
+          <ListGroup
+            items={this.state.genres}
+            selectedItem={this.state.selectedGenre}
+            onItemSelect={this.handleGenreSelect}
+          />
         </div>
         <div className="col">
-          <p>Showing {filtered.length} movies in the database.</p>
+          <p>Showing {totalCount} movies in the database.</p>
           <MoviesTable
             movies={movies}
             sortColumn={sortColumn}
@@ -74,7 +83,7 @@ class Movies extends Component {
             onSort={this.handleSort}
           />
           <Pagination
-            itemsCount={filtered.length}
+            itemsCount={totalCount}
             currentPage={currentPage}
             pageSize={pageSize}
             onPageChange={this.handlePageChange}
