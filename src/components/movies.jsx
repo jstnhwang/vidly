@@ -51,9 +51,7 @@ class Movies extends Component {
     const { sortColumn } = this.state;
 
     const filtered =
-      selectedGenre && selectedGenre._id
-        ? allMovies.filter(m => m.genre._id === selectedGenre._id)
-        : allMovies;
+      selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies;
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
@@ -64,11 +62,7 @@ class Movies extends Component {
     return (
       <div className="row">
         <div className="col-2">
-          <ListGroup
-            items={genres}
-            selectedItem={selectedGenre}
-            onItemSelect={this.handleGenreSelect}
-          />
+          <ListGroup items={genres} selectedItem={selectedGenre} onItemSelect={this.handleGenreSelect} />
         </div>
         <div className="col">
           <p>Showing {filtered.length} movies in the database.</p>
