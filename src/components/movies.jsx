@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import MoviesTable from "./moviesTable";
 import Pagination from "./common/pagination";
 import ListGroup from "./common/listGroup";
@@ -49,7 +50,9 @@ class Movies extends Component {
     const { movies: allMovies, selectedGenre, sortColumn, currentPage, pageSize } = this.state;
 
     const filtered =
-      selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies;
+      selectedGenre && selectedGenre._id
+        ? allMovies.filter(m => m.genre._id === selectedGenre._id)
+        : allMovies;
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     const movies = paginate(sorted, currentPage, pageSize);
@@ -75,6 +78,9 @@ class Movies extends Component {
         </div>
         <div className="col">
           <p>Showing {totalCount} movies in the database.</p>
+          <Link className="btn btn-primary" to="/movies/new">
+            +
+          </Link>
           <MoviesTable
             movies={movies}
             sortColumn={sortColumn}
